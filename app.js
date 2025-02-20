@@ -1,9 +1,9 @@
 const http = require('http');
 const fs = require('fs');
-
+const queryStringSplit = require('./src/querystring.js')
 
 // *첫 페이지 index.html 구동
-function firstPageSet(response){
+function firstPageSet(response){  
   const filePath = fs.readFileSync('./index.html')
   response.writeHead(200, {'Content-Type' : 'text/html'}).end(filePath);
 }
@@ -15,8 +15,8 @@ function pageSet(statuscode, url, response){
  
   const filePath = fs.readFileSync('.' + url)
   response.writeHead(statuscode, {'Content-Type' : contentGet}).end(filePath);
-}
 
+}
 // * file마다 content-Type 설정 할 수 있게 확인
 function fileCheck(url) {
   const urlCompare = url
@@ -28,7 +28,6 @@ function fileCheck(url) {
   }
 }
 
-
 // * 서버 구동 부분
 const server = http.createServer(function(request, response){
   // * 없는 페이지 발생 시 실행 -> 404 page
@@ -37,7 +36,7 @@ const server = http.createServer(function(request, response){
     if(request.method === 'GET'){
       // * 메인 페이지 표출하기
       if(request.url === '/' || request.url === '/index.html'){
-        firstPageSet(response);
+        firstPageSet(response)
       }
 
       // * 초기 구동 js
@@ -61,16 +60,16 @@ const server = http.createServer(function(request, response){
         
         request.on('data', function(data){
           // * 쿼리 스트링 가져오기
-          console.log(data.toString());
+          let dataGet = data.toString();
+          // * querystring 데이터만 추출
+          let queryResult = queryStringSplit(dataGet)
+          console.log(queryResult);
+          console.log(JSON.stringify(queryResult));
         })
-        
 
         // * index.html로 다시 돌아가기 
-        // const url = request.url;
-        // pageSet(200, url, response)
-
+        firstPageSet(response);
       }
-      
     }
   }
   // * 페이지 에러 처리
