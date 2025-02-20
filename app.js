@@ -1,6 +1,8 @@
 const http = require('http');
 const fs = require('fs');
-const queryStringSplit = require('./src/querystring.js')
+const qs = require('querystring');
+// * querystring 잘라서 가져옴
+const queryStringSplit = require('./src/querystring.js');
 
 // *첫 페이지 index.html 구동
 function firstPageSet(response){  
@@ -34,6 +36,7 @@ const server = http.createServer(function(request, response){
   try{
     // * GET 방식 구동 
     if(request.method === 'GET'){
+      console.log(request.url)
       // * 메인 페이지 표출하기
       if(request.url === '/' || request.url === '/index.html'){
         firstPageSet(response)
@@ -64,7 +67,8 @@ const server = http.createServer(function(request, response){
           // * querystring 데이터만 추출
           let queryResult = queryStringSplit(dataGet)
           console.log(queryResult);
-          console.log(JSON.stringify(queryResult));
+          
+          console.log(JSON.stringify(queryResult,null,2));
         })
 
         // * index.html로 다시 돌아가기 
