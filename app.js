@@ -1,6 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 
+
 // *첫 페이지 index.html 구동
 function firstPageSet(response){
   const filePath = fs.readFileSync('./index.html')
@@ -12,7 +13,7 @@ function pageSet(statuscode, url, response){
   // * 확장자 명을 확인해서 Content-Type을 동적으로 수정
   const contentGet = fileCheck(url)
  
-  const filePath = fs.readFileSync( '.' + url)
+  const filePath = fs.readFileSync('.' + url)
   response.writeHead(statuscode, {'Content-Type' : contentGet}).end(filePath);
 }
 
@@ -34,21 +35,22 @@ const server = http.createServer(function(request, response){
   try{
     // * GET 방식 구동 
     if(request.method === 'GET'){
+      console.log(request.url);
       // * 메인 페이지 표출하기
-      if(request.url === '/'){
+      if(request.url === '/' || request.url === '/index.html'){
         firstPageSet(response);
       }
 
       // * 초기 구동 js
       if(request.url === '/app.js'){
-        const url = request.url 
+        const url = request.url
         pageSet(200, url, response)
       }
 
       // * 없는 페이지 표출하게 생성
       if(request.url === '/write.html'){
-        const url = request.url 
-        pageSet(200, url, response)
+        const url = request.url
+        pageSet(200, '/page' + url, response)
       }
 
     }
@@ -60,9 +62,9 @@ const server = http.createServer(function(request, response){
   }
   // * 페이지 에러 처리
   catch(err){
-    if(err) pageSet(404, '/404Page.html', response)
+    if(err) pageSet(404, '/page/404Page.html', response)
   }
-})
+}) 
 
 // * 서버 시작 8000 포트 사용
 server.listen(8000, function(){
