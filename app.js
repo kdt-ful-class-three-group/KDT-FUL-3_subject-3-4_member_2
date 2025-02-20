@@ -1,10 +1,32 @@
 const http = require('http');
 const fs = require('fs');
 
+// *첫 페이지 index.html 구동
 function firstPageSet(response){
   const filePath = fs.readFileSync('./index.html')
   response.writeHead(200, {'Content-Type' : 'text/html'}).end(filePath);
 }
+
+// * pageSetting 부분
+function PageSet(url, response){
+  // * 확장자 명을 확인해서 Content-Type을 동적으로 수정
+  const contentGet = fileCheck(url)
+ 
+  const filePath = fs.readFileSync( '.' + url)
+  response.writeHead(200, {'Content-Type' : contentGet}).end(filePath);
+}
+
+// * file마다 content-Type 설정 할 수 있게 확인
+function fileCheck(url) {
+  const urlCompare = url
+  if(urlCompare.endsWith('.html')){
+    return 'text/html';
+  }
+  if(urlCompare.endsWith('.js')){
+    return 'text/javascript';
+  }
+}
+
 
 // * 서버 구동 부분 
 const server = http.createServer(function(request, response){
@@ -13,6 +35,12 @@ const server = http.createServer(function(request, response){
     // * 메인 페이지 표출하기
     if(request.url === '/'){
       firstPageSet(response);
+    }
+
+    // * 초기 구동 js
+    if(request.url === '/app.js'){
+      const url = request.url 
+      PageSet(url, response)
     }
   }
 
