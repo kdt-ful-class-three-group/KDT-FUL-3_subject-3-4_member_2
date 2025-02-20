@@ -35,7 +35,6 @@ const server = http.createServer(function(request, response){
   try{
     // * GET 방식 구동 
     if(request.method === 'GET'){
-      console.log(request.url);
       // * 메인 페이지 표출하기
       if(request.url === '/' || request.url === '/index.html'){
         firstPageSet(response);
