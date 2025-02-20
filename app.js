@@ -46,7 +46,7 @@ const server = http.createServer(function(request, response){
         pageSet(200, url, response)
       }
 
-      // * 없는 페이지 표출하게 생성
+      // * 글쓰기 페이지 진입
       if(request.url === '/write.html'){
         const url = request.url
         pageSet(200, '/page' + url, response)
@@ -56,6 +56,20 @@ const server = http.createServer(function(request, response){
 
     // * POST 방식 구동
     if(request.method === 'POST'){
+      console.log(request.url);
+      if(request.url === '/index.html'){
+        
+        request.on('data', function(data){
+          // * 쿼리 스트링 가져오기
+          console.log(data.toString());
+        })
+        
+
+        // * index.html로 다시 돌아가기 
+        // const url = request.url;
+        // pageSet(200, url, response)
+
+      }
       
     }
   }
