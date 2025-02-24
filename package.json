@@ -1,5 +1,6 @@
 {
   "name": "kdt-ful-3_subject-3-4_member_2",
+  "type": "module",
   "version": "1.0.0",
   "description": "1. 구동 서버 가동 \r 2. 구동 서버 가동 후 index.html 페이지 표현\r 3. 글 쓰기 버튼을 누를 시 write.html 페이지 이동",
   "main": "app.js",
@@ -16,4 +17,5 @@
     "url": "https://github.com/kdt-ful-class-three-group/KDT-FUL-3_subject-3-4_member_2/issues"
   },
   "homepage": "https://github.com/kdt-ful-class-three-group/KDT-FUL-3_subject-3-4_member_2#readme"
+  
 }

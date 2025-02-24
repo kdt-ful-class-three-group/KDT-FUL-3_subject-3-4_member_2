@@ -1,10 +1,15 @@
-const http = require('http');
-const fs = require('fs');
-const qs = require('querystring');
+// const http = require('http');
+// const fs = require('fs');
+// const qs = require('querystring');
+
+import http from 'node:http';
+import {readFileSync, writeFileSync} from 'node:fs';
+import querystring from 'node:querystring';
+import htmlInsert from './dom.js';
 
 // *첫 페이지 index.html 구동
 function firstPageSet(response){
-  const filePath = fs.readFileSync('./index.html')
+  const filePath = readFileSync('./index.html')
   response.writeHead(200, {'Content-Type' : 'text/html'}).end(filePath);
 }
 
@@ -13,7 +18,7 @@ function pageSet(statuscode, url, response){
   // * 확장자 명을 확인해서 Content-Type을 동적으로 수정
   const contentGet = fileCheck(url)
  
-  const filePath = fs.readFileSync('.' + url)
+  const filePath = readFileSync('.' + url)
   response.writeHead(statuscode, {'Content-Type' : contentGet}).end(filePath);
 }
 
@@ -35,6 +40,7 @@ const server = http.createServer(function(request, response){
   try{
     // * GET 방식 구동 
     if(request.method === 'GET'){
+      console.log(request.url);
       // * 메인 페이지 표출하기
       if(request.url === '/' || request.url === '/index.html'){
         firstPageSet(response);
@@ -51,6 +57,11 @@ const server = http.createServer(function(request, response){
         pageSet(200, url, response)
       }
 
+      // if(request.url === '/readFile.js'){
+      //   const url = request.url
+      //   pageSet(200, url, response)
+      // }
+
     }
 
     // * POST 방식 구동
@@ -63,12 +74,13 @@ const server = http.createServer(function(request, response){
           // * 쿼리스트링 데이터만 출력
           console.log(data.toString());
           // * parse 
-          console.log(qs.parse(data.toString()))
-          let qsData = qs.parse(data.toString());
+          console.log(querystring.parse(data.toString()))
+          let qsData = querystring.parse(data.toString());
           let JSONData = JSON.stringify(qsData)
 
           // * 데이터 하나만 JSON 생성
-          fs.writeFileSync('data.JSON', JSONData, 'utf-8');
+          writeFileSync('data.JSON', JSONData, 'utf-8');
+          htmlInsert();
         })
 
        }
