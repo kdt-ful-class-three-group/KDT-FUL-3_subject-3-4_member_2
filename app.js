@@ -1,6 +1,6 @@
 const http = require('http');
 const fs = require('fs');
-
+const qs = require('querystring');
 
 // *첫 페이지 index.html 구동
 function firstPageSet(response){
@@ -46,17 +46,32 @@ const server = http.createServer(function(request, response){
         pageSet(200, url, response)
       }
 
-      // * 없는 페이지 표출하게 생성
-      if(request.url === '/write.html'){
+      if(request.url === '/dom.js'){
         const url = request.url
-        pageSet(200, '/page' + url, response)
+        pageSet(200, url, response)
       }
 
     }
 
     // * POST 방식 구동
     if(request.method === 'POST'){
-      
+       if(request.url === '/index.html'){
+        
+        let blankArray = []
+  
+        request.on('data', function(data){
+          // * 쿼리스트링 데이터만 출력
+          console.log(data.toString());
+          // * parse 
+          console.log(qs.parse(data.toString()))
+          let qsData = qs.parse(data.toString());
+          let JSONData = JSON.stringify(qsData)
+
+          // * 데이터 하나만 JSON 생성
+          fs.writeFileSync('data.JSON', JSONData, 'utf-8');
+        })
+
+       }
     }
   }
   // * 페이지 에러 처리
